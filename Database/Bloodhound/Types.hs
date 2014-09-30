@@ -146,11 +146,13 @@ module Database.Bloodhound.Types
 
 import Control.Applicative
 import Data.Aeson
+import Data.Aeson.Types (emptyObject)
 import qualified Data.ByteString.Lazy.Char8 as L
 import Data.List (nub)
 import Data.List.NonEmpty (NonEmpty(..))
 import Data.Monoid
 import Data.Text (Text)
+import qualified Data.Map as M
 import qualified Data.Text as T
 import Data.Time.Clock (UTCTime)
 import GHC.Generics (Generic)
@@ -474,6 +476,7 @@ type Size = Int
 data Search = Search { queryBody  :: Maybe Query
                      , filterBody :: Maybe Filter
                      , sortBody   :: Maybe Sort
+                     , aggBody :: Maybe Aggregations
                        -- default False
                      , trackSortScores :: TrackSortScores
                      , from :: From
@@ -940,6 +943,20 @@ data ShardResult =
 showText :: Show a => a -> Text
 showText = T.pack . show
 
+type Aggregations = M.Map Text Aggregation
+  
+data Aggregation = TermsAggregation { term :: Term
+                                    , aggs :: Maybe [(Text, Aggregations)]
+                                    }
+                 | DateHistogramAggregation { field :: FieldName } deriving (Eq, Show)
+
+
+instance ToJSON Aggregation where
+  toJSON (TermsAggregation term aggs) =
+    object ["terms" .= (object [ (termField term) .= (toJSON $ termValue term)]),
+            "aggs" .= (toJSON aggs) ]
+
+  toJSON (DateHistogramAggregation field) = emptyObject
 
 instance Monoid Filter where
   mempty = IdentityFilter
@@ -1533,10 +1550,11 @@ instance (FromJSON a) => FromJSON (EsResult a) where
 
 
 instance ToJSON Search where
-  toJSON (Search query sFilter sort sTrackSortScores sFrom sSize) =
+  toJSON (Search query sFilter sort aggs sTrackSortScores sFrom sSize) =
     omitNulls [ "query" .= query
               , "filter" .= sFilter
               , "sort" .= sort
+              , "aggregations" .= aggs
               , "from" .= sFrom
               , "size" .= sSize
               , "track_scores" .= sTrackSortScores ]
