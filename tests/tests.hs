@@ -235,7 +235,7 @@ main = hspec $ do
       _ <- insertOther
       let sortSpec = DefaultSortSpec $ mkSort (FieldName "age") Ascending
       let search = Search Nothing
-                   (Just IdentityFilter) (Just [sortSpec])
+                   (Just IdentityFilter) (Just [sortSpec]) Nothing
                    False 0 10
       reply <- searchByIndex testServer testIndex search
       let result = eitherDecode (responseBody reply) :: Either String (SearchResult Tweet)
