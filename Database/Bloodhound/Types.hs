@@ -162,7 +162,7 @@ module Database.Bloodhound.Types
 
 import Control.Applicative
 import Data.Aeson
-import Data.Aeson.Types (emptyObject, parseMaybe)
+import Data.Aeson.Types (parseMaybe)
 import qualified Data.ByteString.Lazy.Char8 as L
 import Data.List (nub)
 import Data.List.NonEmpty (NonEmpty(..))
