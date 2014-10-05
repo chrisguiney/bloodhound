@@ -965,7 +965,7 @@ type Aggregations = M.Map Text Aggregation
 data TermOrder = TermOrder{ termSortField :: Text
                           , termSortOrder :: SortOrder } deriving (Eq, Show)
 
-data TermInclusion = Text
+data TermInclusion = TermInclusion Text
                    | TermPattern { pattern :: Text
                                  , flags   :: Text } deriving (Eq, Show)
 
