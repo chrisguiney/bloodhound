@@ -21,7 +21,6 @@ import Test.Hspec
 import Test.Hspec.QuickCheck (prop)
 import Test.QuickCheck
 import qualified Data.Map.Strict as M
-import System.IO (putStrLn)
 
 testServer  :: Server
 testServer  = Server "http://localhost:9200"
