@@ -654,7 +654,7 @@ For convenience, ```mkAggregations``` exists, that will create an
 ```Aggregations``` with the aggregation provided.
 
 For example:
-#+BEGIN_SRC
+#+BEGIN_SRC haskell
 λ> let a = mkAggregations "users" $ TermsAgg $ mkTermsAggregation "user"
 λ> let search = mkAggregateSearch Nothing a
 #+END_SRC
@@ -662,7 +662,7 @@ For example:
 Aggregations can be added to an existing search, using the
 ```aggBody``` field
 
-#+BEGIN_SRC
+#+BEGIN_SRC haskell
 λ> let search  = mkSearch (Just (MatchAllQuery Nothing)) Nothing
 λ> let search' = search {aggBody = Just a}
 #+END_SRC
@@ -670,7 +670,7 @@ Aggregations can be added to an existing search, using the
 Since the ```Aggregations``` structure is just a Map Text
 Aggregation, M.insert can be used to add additional aggregations.
 
-#+BEGIN_SRC
+#+BEGIN_SRC haskell
 λ> let a' = M.insert "age" (TermsAgg $ mkTermsAggregation "age") a
 #+END_SRC
 
@@ -758,13 +758,13 @@ data DateHistogramAggregation
 The Date Histogram Aggregation works much the same as the Terms
 Aggregation.
 
-Relevant functions include ```mkDateHistogram```, and ```toDateHistogram```
+Relevant functions include ~mkDateHistogram~, and ~toDateHistogram~
 
 #+BEGIN_SRC haskell
 λ> let dh = DateHistogramAgg (mkDateHistogram (FieldName "postDate") Minute)
 #+END_SRC
 
-Date histograms also accept a ```FractionalInterval```:
+Date histograms also accept a ~FractionalInterval~:
 
 #+BEGIN_SRC haskell
 FractionalInterval :: Float -> TimeInterval -> Interval
@@ -788,11 +788,11 @@ data DateHistogramResult
                          dateHistogramAggs :: Maybe AggregationResults}
 #+END_SRC
 
-It is an instance of ```BucketAggregation```, and can have nested
+It is an instance of ~BucketAggregation~, and can have nested
 aggregations in each bucket.
 
-Buckets can be extracted from a ```AggregationResult``` using
-```toDateHistogram "name"```
+Buckets can be extracted from a ~AggregationResult~ using
+~toDateHistogram "name"~
 
 For more information on the Date Histogram Aggregation, see:
 http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-bucket-datehistogram-aggregation.html
