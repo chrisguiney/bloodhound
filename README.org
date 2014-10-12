@@ -778,7 +778,7 @@ It can be used as follows:
 let dh = DateHistogramAgg (mkDateHistogram (FieldName "postDate") (FractionalInterval 1.5 Minutes))
 #+END_SRC
 
-The DateHistogramResult is defined as:
+The ~DateHistogramResult~ is defined as:
 
 #+BEGIN_SRC haskell
 data DateHistogramResult
@@ -792,7 +792,7 @@ It is an instance of ~BucketAggregation~, and can have nested
 aggregations in each bucket.
 
 Buckets can be extracted from a ~AggregationResult~ using
-~toDateHistogram "name"~
+~toDateHistogram name~
 
 For more information on the Date Histogram Aggregation, see:
 http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-bucket-datehistogram-aggregation.html
