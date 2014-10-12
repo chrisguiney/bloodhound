@@ -770,7 +770,7 @@ Date histograms also accept a ~FractionalInterval~:
 FractionalInterval :: Float -> TimeInterval -> Interval
 -- TimeInterval is the following:
 data TimeInterval = Weeks | Days | Hours | Minutes | Seconds
-#END_SRC
+#+END_SRC
 
 It can be used as follows:
 
