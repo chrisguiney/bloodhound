@@ -655,45 +655,45 @@ For convenience, ```mkAggregations``` exists, that will create an
 
 For example:
 #+BEGIN_SRC haskell
-λ> let a = mkAggregations "users" $ TermsAgg $ mkTermsAggregation "user"
-λ> let search = mkAggregateSearch Nothing a
+ let a = mkAggregations "users" $ TermsAgg $ mkTermsAggregation "user"
+ let search = mkAggregateSearch Nothing a
 #+END_SRC
 
 Aggregations can be added to an existing search, using the
 ```aggBody``` field
 
 #+BEGIN_SRC haskell
-λ> let search  = mkSearch (Just (MatchAllQuery Nothing)) Nothing
-λ> let search' = search {aggBody = Just a}
+ let search  = mkSearch (Just (MatchAllQuery Nothing)) Nothing
+ let search' = search {aggBody = Just a}
 #+END_SRC
 
 Since the ```Aggregations``` structure is just a Map Text
 Aggregation, M.insert can be used to add additional aggregations.
 
 #+BEGIN_SRC haskell
-λ> let a' = M.insert "age" (TermsAgg $ mkTermsAggregation "age") a
+ let a' = M.insert "age" (TermsAgg $ mkTermsAggregation "age") a
 #+END_SRC
 
 **** Extracting aggregations from results
 Aggregations are part of the reply structure of every search, in the
-form of ```Maybe AggregationResults```
+form of ~Maybe AggregationResults~
 
 #+BEGIN_SRC haskell
 -- Lift decode and response body to be in the IO monad.
-λ> let decode' = liftM decode
-λ> let responseBody' = liftM responseBody
+let decode' = liftM decode
+let responseBody' = liftM responseBody
 let reply = searchByIndex testServer testIndex search
 let response = decode' $ responseBody' reply :: IO (Maybe (SearchResult Tweet))
 
 -- Now that we have our response, we can extract our terms aggregation result -- which is a list of buckets.
 
-λ> let terms = do { response' <- response; return $ response' >>= aggregations >>= toTerms "users" }
-λ> terms
+let terms = do { response' <- response; return $ response' >>= aggregations >>= toTerms "users" }
+terms
 Just (Bucket {buckets = [TermsResult {termKey = "bitemyapp", termsDocCount = 1, termsAggs = Nothing}]})
 #+END_SRC
 
 Note that bucket aggregation results, such as the TermsResult is a
-member of the type class ```BucketAggregation```:
+member of the type class ~BucketAggregation~:
 
 #+BEGIN_SRC haskell
 class BucketAggregation a where
@@ -702,10 +702,10 @@ class BucketAggregation a where
   aggs :: a -> Maybe AggregationResults
 #+END_SRC haskell
 
-You can use the ```aggs``` function to get any nested results, if
+You can use the ~aggs~ function to get any nested results, if
 there were any.  For example, if there were a nested terms
-aggregation keyed to "age" in a TermsResult named ```termresult```, you would call ```aggs termresult >>=
-toTerms "age"```
+aggregation keyed to "age" in a TermsResult named ~termresult~, you would call ~aggs termresult >>=
+toTerms "age"~
 
 **** Terms Aggregation
 #+BEGIN_SRC haskell
@@ -723,11 +723,11 @@ data TermsAggregation
 #+END_SRC
 
 Term Aggregations have two factory functions,
-```mkTermsAggregation```, and ```mkTermsScriptAggregation```, and can
+~mkTermsAggregation~, and ~mkTermsScriptAggregation~, and can
 be used as follows:
 
 #+BEGIN_SRC haskell
-λ> let ta = TermsAgg $ mkTermsAggregation "user"
+let ta = TermsAgg $ mkTermsAggregation "user"
 #+END_SRC
 
 There are of course other options that can be added to a Terms
@@ -761,7 +761,7 @@ Aggregation.
 Relevant functions include ~mkDateHistogram~, and ~toDateHistogram~
 
 #+BEGIN_SRC haskell
-λ> let dh = DateHistogramAgg (mkDateHistogram (FieldName "postDate") Minute)
+let dh = DateHistogramAgg (mkDateHistogram (FieldName "postDate") Minute)
 #+END_SRC
 
 Date histograms also accept a ~FractionalInterval~:
@@ -775,7 +775,7 @@ data TimeInterval = Weeks | Days | Hours | Minutes | Seconds
 It can be used as follows:
 
 #+BEGIN_SRC haskell
-λ> let dh = DateHistogramAgg (mkDateHistogram (FieldName "postDate") (FractionalInterval 1.5 Minutes))
+let dh = DateHistogramAgg (mkDateHistogram (FieldName "postDate") (FractionalInterval 1.5 Minutes))
 #+END_SRC
 
 The DateHistogramResult is defined as:
